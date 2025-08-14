@@ -9,4 +9,11 @@ class Queue extends Model
 {
     /** @use HasFactory<\Database\Factories\QueueFactory> */
     use HasFactory;
+    protected $fillable = [
+        'number',
+        'type',
+        'datetime',
+        'status',
+        'staff_id'
+    ];
 }

@@ -15,7 +15,7 @@ const takeQueue = async () => {
   if (!type.value) return
   loading.value = true
   try {
-    const res = await axios.post('http://localhost:8000/api/queue', {
+    const res = await axios.post('/api/queue', {
       type: type.value
     })
     queueNumber.value = res.data.data.number
