@@ -3,7 +3,13 @@ import { ref, onMounted, computed } from "vue";
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select'
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-vue-next";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import axios from "axios";
 
 const staffList = ref([]);
@@ -12,35 +18,61 @@ const counters = ref([
   { selectedStaff: null, currentQueue: null },
   { selectedStaff: null, currentQueue: null },
 ]);
+const queueList = ref([]);
+const r_count = ref(2);
+const noQueueDialog = ref(false);
+let pollingInterval = null;
+
+const fetchQueue = async () => {
+  try {
+    const res = await axios.get('/api/queue')
+    queueList.value = res.data.data
+    console.log('Antrian:', queueList.value)
+  } catch (error) {
+    console.error('Gagal ambil antrian:', error)
+  }
+}
 
 // Panggil / selesaikan antrian
 const handleQueueAction = async (counterIndex) => {
   let counter = counters.value[counterIndex];
 
   if (!counter.currentQueue) {
-    // Panggil antrian baru
-    const res = await axios.post("/api/queue/call", {
-      staff_id: counter.selectedStaff,
-    });
-    counter.currentQueue = res.data.number;
+    if (queueList.value.length === 0) {
+      noQueueDialog.value = true;
+      return;
+    }
+    if (queueList.value[0].type === 'R' && r_count.value < 2) {
+        counter.currentQueue = queueList.value.shift().number;
+        r_count.value++;
+    } else if (queueList.value.length > 1 && queueList.value[1].type === 'R' && r_count.value < 2) {
+        counter.currentQueue = queueList.value.splice(1, 1)[0].number;
+        r_count.value++;
+    } else if (queueList.value[0].type === 'W') {
+        counter.currentQueue = queueList.value.shift().number;
+        r_count.value = 0;
+    } else {
+        counter.currentQueue = queueList.value.shift().number;
+        r_count.value = 1;
+    }
+    
   } else {
-    // Selesaikan antrian
-    await axios.post("/api/queue/finish", {
-      staff_id: counter.selectedStaff,
-      queue_number: counter.currentQueue,
-    });
     counter.currentQueue = null;
   }
 };
 
-// Ambil list staff dari API
 onMounted(async () => {
+  // Ambil list staff dari API
   try {
     const res = await axios.get('/api/staff')
     staffList.value = res.data.data
   } catch (error) {
     console.error('Gagal ambil staff:', error)
   }
+
+  // Ambil list antrian dari API setiap 10 detik
+  fetchQueue()
+  pollingInterval = setInterval(fetchQueue, 10000)
 })
 
 // Ambil semua staff_id yang sedang dipilih di loket lain
@@ -56,6 +88,16 @@ const isStaffDisabled = (staffId, currentCounterId) => {
 </script>
 
 <template>
+    <AlertDialog :open="noQueueDialog" @openChange="noQueueDialog = $event">
+        <AlertDialogContent>
+        <AlertDialogHeader>
+            <AlertDialogTitle>Tidak Ada Antrian</AlertDialogTitle>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+            <Button @click="noQueueDialog = false">OK</Button>
+        </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
     <div class="flex-1 text-center m-4">
         <h2 class="text-lg font-bold">Panggil Antrian</h2>
     </div>
@@ -107,4 +149,5 @@ const isStaffDisabled = (staffId, currentCounterId) => {
         </CardContent>
         </Card>
     </div>
+    
 </template>

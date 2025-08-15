@@ -7,4 +7,5 @@ use App\Http\Controllers\QueueController;
 
 Route::get('/staff', [StaffController::class, 'index']);
 
+Route::get('/queue', [QueueController::class, 'index']);
 Route::post('/queue', [QueueController::class, 'store']);

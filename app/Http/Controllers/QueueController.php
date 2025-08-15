@@ -14,7 +14,11 @@ class QueueController extends Controller
      */
     public function index()
     {
-        //
+        $queue = Queue::where('status', 'waiting')->get();
+
+        return response()->json([
+            'data' => $queue
+        ]);
     }
 
     /**
