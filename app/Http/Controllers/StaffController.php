@@ -13,7 +13,11 @@ class StaffController extends Controller
      */
     public function index()
     {
-        //
+        $staff = Staff::where('active', true)->get();
+
+        return response()->json([
+            'data' => $staff
+        ]);
     }
 
     /**
