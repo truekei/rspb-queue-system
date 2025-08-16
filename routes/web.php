@@ -14,3 +14,7 @@ Route::get('/call', function () {
 Route::get('/queue', function () {
     return Inertia::render('QueuePage');
 })->name('queue');
+
+Route::get('/dashboard', function () {
+    return Inertia::render('DashboardPage');
+})->name('dashboard');

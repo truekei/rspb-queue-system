@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DisplayCounterController;
 
 Route::get('/staff', [StaffController::class, 'index']);
@@ -16,5 +17,7 @@ Route::post('/queue/{queueNumber}/done', [QueueController::class, 'doneUpdateQue
 
 Route::post('/log', [LogController::class, 'store']);
 Route::post('/log/{queueNumber}', [LogController::class, 'update']);
+
+Route::get('/dashboard', [DashboardController::class, 'index']);
 
 Route::post('/display-data', DisplayCounterController::class);
