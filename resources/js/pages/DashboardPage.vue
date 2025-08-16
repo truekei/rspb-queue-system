@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { Link } from '@inertiajs/vue3'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-vue-next"
 
 const dashboardData = ref({
   activeQueues: 0,
@@ -32,7 +34,14 @@ onMounted(() => {
 <template>
     <div class="p-6 space-y-6 bg-gray-100">
         <div class="flex">
-            <h1 class="text-2xl font-bold">Dashboard Antrian</h1>
+            <div class="flex-1 text-start">
+                <h1 class="text-2xl font-bold">Dashboard Antrian</h1>
+            </div>
+            <div class="flex-1 text-end">
+                <Link :href="route('home')">
+                    <Button class="h-10">Kembali <ChevronRight class="w-4 h-4" /></Button>
+                </Link>
+            </div>
         </div>
 
         <!-- Ringkasan -->

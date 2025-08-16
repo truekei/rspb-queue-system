@@ -4,7 +4,7 @@ import { useEchoPublic } from '@laravel/echo-vue'
 import { Link } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ChevronRight } from "lucide-vue-next"
+import { ChevronLeft, ChevronRight } from "lucide-vue-next"
 import axios from "axios";
 
 const counters = ref([
@@ -55,9 +55,21 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="p-6 space-y-6">
-        <div class="flex-1 text-center">
-            <p class="text-xl font-bold">Sistem Antrian Digital</p>
+    <div class="p-6 space-y-6 bg-gray-100">
+        <div class="flex">
+            <div class="flex-1 text-start">
+                <Link :href="route('dashboard')">
+                    <Button><ChevronLeft class="w-4 h-4" /> Lihat Dashboard</Button>
+                </Link>
+            </div>
+            <div class="flex-1 text-center">
+                <p class="text-2xl font-bold">Sistem Antrian Digital</p>
+            </div>
+            <div class="flex-1 text-end">
+                <Link :href="route('call')">
+                    <Button>Panggil Antrian <ChevronRight class="w-4 h-4" /></Button>
+                </Link>
+            </div>
         </div>
         <!-- Loket Section -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">

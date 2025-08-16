@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { Link } from '@inertiajs/vue3'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select'
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { ChevronLeft } from "lucide-vue-next"
 import axios from "axios";
 
 const staffList = ref([]);
@@ -159,60 +161,70 @@ const isStaffDisabled = (staffId, currentCounterId) => {
         </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
-    <div class="flex-1 text-center m-4">
-        <h2 class="text-lg font-bold">Panggil Antrian</h2>
+    <div class="p-6 space-y-6 bg-gray-100">
+      <div class="flex">
+        <div class="flex-1 text-start">
+          <Link :href="route('home')">
+            <Button class="h-10"><ChevronLeft class="w-4 h-4" /> Kembali</Button>
+          </Link>
+        </div>
+        <div class="flex-1 text-center">
+          <h1 class="text-2xl font-bold">Panggil Antrian</h1>
+        </div>
+        <div class="flex-1">
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
+          <Card v-for="(counter, index) in counters" :key="index" class="p-4 shadow-lg">
+          <CardHeader>
+              <CardTitle>Loket {{ index + 1 }}</CardTitle>
+          </CardHeader>
+
+          <CardContent>
+              <!-- Dropdown pilih staff -->
+              <Select v-model="counter.selectedStaff" class="mb-4">
+                  <label for="staff-select-{{ index }}" class="block mb-2 text-sm font-medium text-gray-900">Pilih Staff</label>
+                  <SelectTrigger class="w-full">
+                      <SelectValue placeholder="Pilih Staff" />
+                  </SelectTrigger>
+                  <SelectContent>
+                      <!-- Opsi Kosong -->
+                      <SelectItem :value="null">Kosong</SelectItem>
+
+                      <!-- Opsi Staff -->
+                      <SelectItem
+                          v-for="staff in staffList"
+                          :key="staff.id"
+                          :value="staff.id"
+                          :disabled="isStaffDisabled(staff.id, index)"
+                      >
+                          {{ staff.name }}
+                      </SelectItem>
+                  </SelectContent>
+              </Select>
+
+              <!-- Display nomor antrian -->
+              <div class="text-center my-4">
+              <p class="text-gray-500">Nomor Antrian</p>
+              <p class="text-4xl font-bold">
+                  {{ counter.currentQueue ?? "-" }}
+              </p>
+              </div>
+
+              <!-- Tombol panggil/selesaikan -->
+              <Button
+                class="w-full"
+                :disabled="!counter.selectedStaff || counter.loading"
+                @click="handleQueueAction(index)"
+              >
+                {{ 
+                  counter.loading 
+                    ? "Menyelesaikan..." 
+                    : (counter.currentQueue ? "Selesaikan Antrian" : "Panggil Antrian") 
+                }}
+              </Button>
+          </CardContent>
+          </Card>
+      </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
-        <Card v-for="(counter, index) in counters" :key="index" class="p-4 shadow-lg">
-        <CardHeader>
-            <CardTitle>Loket {{ index + 1 }}</CardTitle>
-        </CardHeader>
-
-        <CardContent>
-            <!-- Dropdown pilih staff -->
-            <Select v-model="counter.selectedStaff" class="mb-4">
-                <label for="staff-select-{{ index }}" class="block mb-2 text-sm font-medium text-gray-900">Pilih Staff</label>
-                <SelectTrigger class="w-full">
-                    <SelectValue placeholder="Pilih Staff" />
-                </SelectTrigger>
-                <SelectContent>
-                    <!-- Opsi Kosong -->
-                    <SelectItem :value="null">Kosong</SelectItem>
-
-                    <!-- Opsi Staff -->
-                    <SelectItem
-                        v-for="staff in staffList"
-                        :key="staff.id"
-                        :value="staff.id"
-                        :disabled="isStaffDisabled(staff.id, index)"
-                    >
-                        {{ staff.name }}
-                    </SelectItem>
-                </SelectContent>
-            </Select>
-
-            <!-- Display nomor antrian -->
-            <div class="text-center my-4">
-            <p class="text-gray-500">Nomor Antrian</p>
-            <p class="text-4xl font-bold">
-                {{ counter.currentQueue ?? "-" }}
-            </p>
-            </div>
-
-            <!-- Tombol panggil/selesaikan -->
-            <Button
-              class="w-full"
-              :disabled="!counter.selectedStaff || counter.loading"
-              @click="handleQueueAction(index)"
-            >
-              {{ 
-                counter.loading 
-                  ? "Menyelesaikan..." 
-                  : (counter.currentQueue ? "Selesaikan Antrian" : "Panggil Antrian") 
-              }}
-            </Button>
-        </CardContent>
-        </Card>
-    </div>
-    
 </template>
