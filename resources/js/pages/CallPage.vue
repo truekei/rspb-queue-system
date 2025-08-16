@@ -27,7 +27,6 @@ const fetchQueue = async () => {
   try {
     const res = await axios.get('/api/queue')
     queueList.value = res.data.data
-    console.log('Antrian:', queueList.value)
   } catch (error) {
     console.error('Gagal ambil antrian:', error)
   }
@@ -42,6 +41,8 @@ const handleQueueAction = async (counterIndex) => {
       noQueueDialog.value = true;
       return;
     }
+
+    // Ambil antrian berdasarkan algoritma 2R:1W
     if (queueList.value[0].type === 'R' && r_count.value < 2) {
         counter.currentQueue = queueList.value.shift().number;
         r_count.value++;
@@ -55,9 +56,48 @@ const handleQueueAction = async (counterIndex) => {
         counter.currentQueue = queueList.value.shift().number;
         r_count.value = 1;
     }
-    
+
+    // Update status antrian menjadi 'called'
+    try {
+      await axios.post(`/api/queue/${counter.currentQueue}/called`, {
+        staff_id: counter.selectedStaff
+      });
+    } catch (error) {
+      console.error('Gagal update status antrian:', error);
+    }
+
+    // Broadcast data ke display
+    try {
+      await axios.post('/api/display-data', {
+        counter: counterIndex,
+        staff_id: counter.selectedStaff,
+        queue: counter.currentQueue
+      });
+    } catch (error) {
+      console.error('Gagal kirim data counter:', error);
+    }
+
   } else {
+    
+    // Update status antrian menjadi 'done'
+    try {
+      await axios.post(`/api/queue/${counter.currentQueue}/done`);
+    } catch (error) {
+      console.error('Gagal update status antrian:', error);
+    }
+    
     counter.currentQueue = null;
+    
+    // Broadcast ke display
+    try {
+      await axios.post('/api/display-data', {
+        counter: counterIndex,
+        staff_id: counter.selectedStaff,
+        queue: null
+      });
+    } catch (error) {
+      console.error('Gagal kirim data counter:', error);
+    }
   }
 };
 

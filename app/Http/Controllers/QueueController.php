@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Queue;
+use App\Events\CallQueueEvent;
 use App\Http\Requests\StoreQueueRequest;
 use App\Http\Requests\UpdateQueueRequest;
 use Carbon\Carbon;
@@ -90,9 +91,24 @@ class QueueController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateQueueRequest $request, Queue $queue)
+    public function calledUpdateQueue(UpdateQueueRequest $request, $queueNumber)
     {
-        //
+        $queue = Queue::where('number', $queueNumber)->first();
+
+        $queue->status = 'called';
+        $queue->staff_id = $request->staff_id;
+        $queue->save();
+
+        return response()->json(['success' => true]);
+    }
+    public function doneUpdateQueue($queueNumber)
+    {
+        $queue = Queue::where('number', $queueNumber)->first();
+
+        $queue->status = 'done';
+        $queue->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
