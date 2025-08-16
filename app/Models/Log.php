@@ -9,4 +9,10 @@ class Log extends Model
 {
     /** @use HasFactory<\Database\Factories\LogFactory> */
     use HasFactory;
+    protected $fillable = [
+        'queue_id',
+        'staff_id',
+        'start_time',
+        'end_time'
+    ];
 }

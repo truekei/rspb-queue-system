@@ -14,9 +14,9 @@ import axios from "axios";
 
 const staffList = ref([]);
 const counters = ref([
-  { selectedStaff: null, currentQueue: null },
-  { selectedStaff: null, currentQueue: null },
-  { selectedStaff: null, currentQueue: null },
+  { selectedStaff: null, currentQueue: null, loading: false },
+  { selectedStaff: null, currentQueue: null, loading: false },
+  { selectedStaff: null, currentQueue: null, loading: false },
 ]);
 const queueList = ref([]);
 const r_count = ref(2);
@@ -66,6 +66,16 @@ const handleQueueAction = async (counterIndex) => {
       console.error('Gagal update status antrian:', error);
     }
 
+    // Create log antrian
+    try {
+      await axios.post('/api/log', {
+        staff_id: counter.selectedStaff,
+        queue_number: counter.currentQueue
+      });
+    } catch (error) {
+      console.error('Gagal membuat log:', error);
+    }
+
     // Broadcast data ke display
     try {
       await axios.post('/api/display-data', {
@@ -78,6 +88,7 @@ const handleQueueAction = async (counterIndex) => {
     }
 
   } else {
+    counter.loading = true;
     
     // Update status antrian menjadi 'done'
     try {
@@ -85,8 +96,17 @@ const handleQueueAction = async (counterIndex) => {
     } catch (error) {
       console.error('Gagal update status antrian:', error);
     }
+
+    // Update log
+    try {
+      await axios.post(`/api/log/${counter.currentQueue}`);
+    } catch (error) {
+      console.error('Gagal membuat log:', error);
+    } finally {
+      counter.loading = false;
+      counter.currentQueue = null;
+    }
     
-    counter.currentQueue = null;
     
     // Broadcast ke display
     try {
@@ -180,11 +200,15 @@ const isStaffDisabled = (staffId, currentCounterId) => {
 
             <!-- Tombol panggil/selesaikan -->
             <Button
-            class="w-full"
-            :disabled="!counter.selectedStaff"
-            @click="handleQueueAction(index)"
+              class="w-full"
+              :disabled="!counter.selectedStaff || counter.loading"
+              @click="handleQueueAction(index)"
             >
-            {{ counter.currentQueue ? "Selesaikan Antrian" : "Panggil Antrian" }}
+              {{ 
+                counter.loading 
+                  ? "Menyelesaikan..." 
+                  : (counter.currentQueue ? "Selesaikan Antrian" : "Panggil Antrian") 
+              }}
             </Button>
         </CardContent>
         </Card>

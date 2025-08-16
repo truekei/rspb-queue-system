@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Log;
 use App\Http\Requests\StoreLogRequest;
 use App\Http\Requests\UpdateLogRequest;
+use App\Models\Queue;
 
 class LogController extends Controller
 {
@@ -29,7 +30,14 @@ class LogController extends Controller
      */
     public function store(StoreLogRequest $request)
     {
-        //
+        $staffId = $request->staff_id;
+        $queueId = Queue::where('number', $request->queue_number)->first()->id;
+        Log::create([
+            'queue_id' => $queueId,
+            'staff_id' => $staffId,
+            'start_time' => now(),
+            'end_time' => null
+        ]);
     }
 
     /**
@@ -51,9 +59,14 @@ class LogController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLogRequest $request, Log $log)
+    public function update($queueNumber)
     {
-        //
+        $log = Log::where('queue_id', Queue::where('number', $queueNumber)->first()->id)
+            ->whereNull('end_time')
+            ->first();
+
+        $log->end_time = now();
+        $log->save();
     }
 
     /**
