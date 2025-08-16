@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Queue;
-use App\Events\CallQueueEvent;
 use App\Http\Requests\StoreQueueRequest;
 use App\Http\Requests\UpdateQueueRequest;
-use Carbon\Carbon;
 
 class QueueController extends Controller
 {
@@ -39,11 +37,8 @@ class QueueController extends Controller
             'type' => 'required|in:R,W'
         ]);
 
-        $today = Carbon::today();
-
-        // Hitung nomor terakhir untuk tipe & tanggal hari ini
+        // Hitung nomor terakhir untuk tipe antrian
         $lastQueue = Queue::where('type', $request->type)
-            ->whereDate('datetime', $today)
             ->orderByDesc('id')
             ->first();
 
@@ -54,7 +49,7 @@ class QueueController extends Controller
             $nextNumber = $lastNumber + 1;
         }
 
-        // Format nomor antrian (misal: R001)
+        // Format nomor antrian
         $queueNumber = $request->type . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
         // Simpan ke database
@@ -67,9 +62,9 @@ class QueueController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Queue created successfully',
+            'success' => true,
             'data' => $queue
-        ], 201);
+        ]);
     }
 
     /**
