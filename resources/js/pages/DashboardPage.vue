@@ -80,7 +80,7 @@ onMounted(() => {
                     <CardTitle>Jumlah Staff Aktif</CardTitle>
                     </CardHeader>
                     <CardContent>
-                    <p class="text-3xl font-bold">{{ dashboardData.activeStaff.length }}</p>
+                    <p class="text-3xl font-bold">{{ dashboardData.activeStaff }}</p>
                     </CardContent>
                 </Card>
                 <Card class="col-span-2">
@@ -106,7 +106,7 @@ onMounted(() => {
         <!-- Top Staff -->
         <Card>
         <CardHeader>
-            <CardTitle>Daftar Staff Aktif</CardTitle>
+            <CardTitle>Daftar Pelayanan Staff Aktif</CardTitle>
         </CardHeader>
         <CardContent>
             <table class="w-full text-left border-collapse">
@@ -118,7 +118,7 @@ onMounted(() => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="staff in dashboardData.activeStaff" :key="staff.id" class="border-b">
+                <tr v-for="staff in dashboardData.servedStaff" :key="staff.id" class="border-b">
                 <td class="py-2 px-4">{{ staff.name }}</td>
                 <td class="py-2 px-4">{{ staff.total_served }}</td>
                 <td class="py-2 px-4">

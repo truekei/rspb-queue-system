@@ -20,7 +20,8 @@ class DashboardController extends Controller
         $activeQueuesW = Queue::where('status', 'waiting')
             ->where('type', 'W')
             ->count();
-        $activeStaff = DB::table('staff')
+        $activeStaff = Staff::where('active', true)->count();
+        $servedStaff = DB::table('staff')
             ->join('logs', 'staff.id', '=', 'logs.staff_id')
             ->where('staff.active', true)
             ->whereNotNull('logs.end_time')
@@ -44,6 +45,7 @@ class DashboardController extends Controller
                     'W' => $activeQueuesW
                 ],
                 'activeStaff' => $activeStaff,
+                'servedStaff' => $servedStaff,
                 'topStaff' => $topStaff,
             ]
         ]);
