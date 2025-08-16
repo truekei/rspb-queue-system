@@ -113,7 +113,7 @@ onMounted(() => {
                 <td class="py-2 px-4">{{ staff.name }}</td>
                 <td class="py-2 px-4">{{ staff.total_served }}</td>
                 <td class="py-2 px-4">
-                    {{ staff.time_average ? staff.time_average + ' detik' : '-' }}
+                    {{ staff.time_average ? Math.round(staff.time_average * 100) / 100 + ' detik' : '-' }}
                 </td>
                 </tr>
             </tbody>
