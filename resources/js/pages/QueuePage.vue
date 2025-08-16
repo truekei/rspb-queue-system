@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue'
+import { Link } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select'
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
+import { ChevronLeft } from "lucide-vue-next"
 import axios from 'axios'
 
 const type = ref('')
@@ -30,23 +32,33 @@ const takeQueue = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-    <Card class="w-full max-w-md">
+  <div class="flex justify-start bg-gray-100 p-4">
+    <Link :href="route('home')">
+      <Button class="h-10"><ChevronLeft class="w-4 h-4" /> Kembali</Button>
+    </Link>
+  </div>
+  <div class="flex flex-col items-center justify-center bg-gray-100 p-4">
+    <Card class="w-full max-w-lg">
       <CardHeader>
         <CardTitle class="text-xl font-bold">Pengambilan Nomor Antrian</CardTitle>
         <CardDescription>Pilih jenis antrian yang ingin diambil</CardDescription>
       </CardHeader>
       <CardContent>
         <div class="flex flex-col gap-4">
-          <Select v-model="type">
-            <SelectTrigger>
-              <SelectValue placeholder="Pilih jenis antrian" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="R">Reservasi</SelectItem>
-              <SelectItem value="W">Walk-in</SelectItem>
-            </SelectContent>
-          </Select>
+            <ToggleGroup type="single" v-model="type" class="w-full">
+            <ToggleGroupItem 
+              value="R" 
+              class="bg-green-600 hover:bg-green-500 data-[state=on]:bg-green-700"
+              >
+              <span class="text-white">Reservasi</span>
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="W" 
+              class="bg-blue-600 hover:bg-blue-500 data-[state=on]:bg-blue-700"
+            >
+              <span class="text-white">Walk-in</span>
+            </ToggleGroupItem>
+            </ToggleGroup>
           <Button @click="takeQueue" :disabled="loading || !type">
             {{ loading ? 'Mengambil...' : 'Ambil Nomor' }}
           </Button>
