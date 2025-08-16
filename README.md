@@ -33,7 +33,7 @@ Ikuti langkah-langkah berikut untuk menjalankan aplikasi di local development:
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/username/rspb-queue-system.git
+git clone https://github.com/truekei/rspb-queue-system.git
 cd rspb-queue-system
 ```
 ### 2. Install Dependencies
@@ -71,5 +71,4 @@ Jalankan Laravel, Vite, Queue Worker, dan Reverb sekaligus dengan command:
 ```bash
 composer run dev
 ```
----
-### Aplikasi bisa diakses di `http://localhost:8000`
+#### Aplikasi bisa diakses di `http://localhost:8000`
