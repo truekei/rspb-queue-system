@@ -28,6 +28,9 @@ useEchoPublic(
     "CallQueueEvent",
     (e) => {
         updateCounterDisplay(e.counter, e.staffName, e.queueNumber);
+        if (e.announce) {
+            playBell();
+        }
         fetchQueue();
     },
 );
@@ -36,6 +39,14 @@ const updateCounterDisplay = (counterIndex, staffName, queueNumber) => {
     const counter = counters.value[counterIndex];
     counter.selectedStaff = staffName;
     counter.currentQueue = queueNumber;
+};
+
+const playBell = () => {
+    const audio = new Audio('/sounds/bell.mp3');
+    audio.volume = 0.5;
+    audio.play().catch(error => {
+        console.error('Gagal memutar suara:', error);
+    });
 };
 
 onMounted(() => {

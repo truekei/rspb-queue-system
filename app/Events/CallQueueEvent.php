@@ -15,7 +15,7 @@ class CallQueueEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public int $counter, public ?string $staffName, public ?string $queueNumber)
+    public function __construct(public int $counter, public ?string $staffName, public ?string $queueNumber, public bool $announce)
     {
         //
     }

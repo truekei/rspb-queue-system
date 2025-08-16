@@ -16,8 +16,9 @@ class DisplayCounterController extends Controller
         $counter = $request->counter;
         $staffName = Staff::find($request->staff_id)->name;
         $queue = $request->queue;
+        $announce = $request->announce;
 
-        broadcast(new CallQueueEvent($counter, $staffName, $queue));
+        broadcast(new CallQueueEvent($counter, $staffName, $queue, $announce));
 
     }
 }

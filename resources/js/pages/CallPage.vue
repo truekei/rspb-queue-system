@@ -81,7 +81,8 @@ const handleQueueAction = async (counterIndex) => {
       await axios.post('/api/display-data', {
         counter: counterIndex,
         staff_id: counter.selectedStaff,
-        queue: counter.currentQueue
+        queue: counter.currentQueue,
+        announce: true
       });
     } catch (error) {
       console.error('Gagal kirim data counter:', error);
@@ -107,13 +108,13 @@ const handleQueueAction = async (counterIndex) => {
       counter.currentQueue = null;
     }
     
-    
     // Broadcast ke display
     try {
       await axios.post('/api/display-data', {
         counter: counterIndex,
         staff_id: counter.selectedStaff,
-        queue: null
+        queue: null,
+        announce: false
       });
     } catch (error) {
       console.error('Gagal kirim data counter:', error);
