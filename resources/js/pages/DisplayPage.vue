@@ -1,4 +1,4 @@
-<script setup lang="js">
+<script setup>
 import { ref, onMounted } from 'vue'
 import { useEchoPublic } from '@laravel/echo-vue'
 import { Link } from '@inertiajs/vue3'

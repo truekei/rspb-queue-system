@@ -38,18 +38,16 @@ cd rspb-queue-system
 ```
 ### 2. Install Dependencies
 ```bash
-# Install dependency PHP
 composer install
-
-# Install dependency JavaScript
 npm install
+npm run build
 ```
 ### 3. Konfigurasi Environment
 Salin file `.env.example` menjadi `.env`:
 ```bash
 cp .env.example .env
 ```
-Atur konfigurasi database sesuai kebutuhan (contoh MySQL):
+Atur konfigurasi database di `.env` sesuai kebutuhan (contoh MySQL):
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -71,4 +69,4 @@ Jalankan Laravel, Vite, Queue Worker, dan Reverb sekaligus dengan command:
 ```bash
 composer run dev
 ```
-#### Aplikasi bisa diakses di `http://localhost:8000`
+#### Aplikasi bisa diakses di `http://localhost:8000` atau `http://127.0.0.1:8000/`

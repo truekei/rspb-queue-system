@@ -1,4 +1,4 @@
-<script setup lang="js">
+<script setup>
 import { ref, onMounted, computed } from "vue";
 import { Link } from '@inertiajs/vue3'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
