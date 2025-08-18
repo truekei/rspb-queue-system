@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { useEchoPublic } from '@laravel/echo-vue'
 import { Link } from '@inertiajs/vue3'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select'
@@ -33,6 +34,18 @@ const fetchQueue = async () => {
     console.error('Gagal ambil antrian:', error)
   }
 }
+
+useEchoPublic(
+    'public-queue-channel',
+    "LoadDisplayEvent",
+    (e) => {
+      axios.post('/api/display-load/counters', {
+        counters: counters.value
+      }).catch(error => {
+        console.error('Error sending counters:', error);
+      });
+    },
+);
 
 // Panggil / selesaikan antrian
 const handleQueueAction = async (counterIndex) => {

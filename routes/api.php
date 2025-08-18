@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BroadcastController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
@@ -21,3 +22,5 @@ Route::post('/log/{queueNumber}', [LogController::class, 'update']);
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
 Route::post('/display-data', DisplayCounterController::class);
+Route::post('/display-load', [BroadcastController::class, 'displayLoad']);
+Route::post('/display-load/counters', [BroadcastController::class, 'displayLoadCounters']);

@@ -34,6 +34,13 @@ useEchoPublic(
         fetchQueue();
     },
 );
+useEchoPublic(
+    'public-queue-channel',
+    "LoadDisplayCountersEvent",
+    (e) => {
+        counters.value = e.counters;
+    },
+);
 
 const updateCounterDisplay = (counterIndex, staffName, queueNumber) => {
     const counter = counters.value[counterIndex];
@@ -51,6 +58,11 @@ const playBell = () => {
 
 onMounted(() => {
     fetchQueue();
+
+    // Kirim broadcast ke pemanggilan
+    axios.post('/api/display-load').catch(error => {
+        console.error('Error sending broadcast:', error);
+    });
 })
 </script>
 
