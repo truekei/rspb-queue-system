@@ -27,6 +27,9 @@ const takeQueue = async () => {
     alert('Gagal mengambil nomor antrian')
   } finally {
     loading.value = false
+    axios.post('/api/taking-queue').catch(error => {
+      console.error('Error sending taking queue event:', error);
+    });
   }
 }
 </script>

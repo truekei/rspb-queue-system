@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TakingQueueEvent;
 use App\Events\LoadDisplayEvent;
 use App\Events\CallQueueEvent;
 use App\Events\LoadDisplayCountersEvent;
@@ -13,7 +14,6 @@ class BroadcastController extends Controller
     public function displayLoad()
     {
         broadcast(new LoadDisplayEvent());
-        return response()->json(['status' => 'success']);
     }
 
     public function displayLoadCounters(Request $request)
@@ -28,7 +28,6 @@ class BroadcastController extends Controller
         ];
 
         broadcast(new LoadDisplayCountersEvent($counters));
-        return response()->json(['status' => 'success']);
     }
 
     public function callQueue(Request $request)
@@ -40,5 +39,9 @@ class BroadcastController extends Controller
 
         broadcast(new CallQueueEvent($counter, $staffName, $queue, $announce));
 
+    }
+    public function takingQueue()
+    {
+        broadcast(new TakingQueueEvent());
     }
 }

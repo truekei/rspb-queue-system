@@ -48,6 +48,15 @@ useEchoPublic(
     },
 );
 
+// Subscribe broadcast setiap ada yang mengambil antrian
+useEchoPublic(
+    'public-queue-channel',
+    "TakingQueueEvent",
+    (e) => {
+      fetchQueue();
+    },
+);
+
 // Panggil / selesaikan antrian
 const handleQueueAction = async (counterIndex) => {
   let counter = counters.value[counterIndex];

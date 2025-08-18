@@ -24,3 +24,4 @@ Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::post('/display-data', [BroadcastController::class, 'callQueue']);
 Route::post('/display-load', [BroadcastController::class, 'displayLoad']);
 Route::post('/display-load/counters', [BroadcastController::class, 'displayLoadCounters']);
+Route::post('/taking-queue', [BroadcastController::class, 'takingQueue']);

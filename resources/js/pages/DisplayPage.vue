@@ -45,6 +45,15 @@ useEchoPublic(
     },
 );
 
+// Subscribe broadcast setiap ada yang mengambil antrian
+useEchoPublic(
+    'public-queue-channel',
+    "TakingQueueEvent",
+    (e) => {
+      fetchQueue();
+    },
+);
+
 const updateCounterDisplay = (counterIndex, staffName, queueNumber) => {
     const counter = counters.value[counterIndex];
     counter.selectedStaff = staffName;
