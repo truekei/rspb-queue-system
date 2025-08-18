@@ -21,6 +21,6 @@ Route::post('/log/{queueNumber}', [LogController::class, 'update']);
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
-Route::post('/display-data', DisplayCounterController::class);
+Route::post('/display-data', [BroadcastController::class, 'callQueue']);
 Route::post('/display-load', [BroadcastController::class, 'displayLoad']);
 Route::post('/display-load/counters', [BroadcastController::class, 'displayLoadCounters']);

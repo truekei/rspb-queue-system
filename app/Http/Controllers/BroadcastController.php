@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\LoadDisplayEvent;
+use App\Events\CallQueueEvent;
 use App\Events\LoadDisplayCountersEvent;
 use App\Models\Staff;
 use Illuminate\Http\Request;
@@ -28,5 +29,16 @@ class BroadcastController extends Controller
 
         broadcast(new LoadDisplayCountersEvent($counters));
         return response()->json(['status' => 'success']);
+    }
+
+    public function callQueue(Request $request)
+    {
+        $counter = $request->counter;
+        $staffName = Staff::find($request->staff_id)->name;
+        $queue = $request->queue;
+        $announce = $request->announce;
+
+        broadcast(new CallQueueEvent($counter, $staffName, $queue, $announce));
+
     }
 }

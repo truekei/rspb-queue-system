@@ -23,6 +23,7 @@ const fetchQueue = async () => {
     }
 }
 
+// Subscribe broadcast setiap antrian dipanggil
 useEchoPublic(
     'public-queue-channel',
     "CallQueueEvent",
@@ -34,6 +35,8 @@ useEchoPublic(
         fetchQueue();
     },
 );
+
+// Subscribe broadcast untuk mengambil state antrian
 useEchoPublic(
     'public-queue-channel',
     "LoadDisplayCountersEvent",

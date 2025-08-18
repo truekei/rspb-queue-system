@@ -35,6 +35,7 @@ const fetchQueue = async () => {
   }
 }
 
+// Subscribe broadcast setiap display di-load
 useEchoPublic(
     'public-queue-channel',
     "LoadDisplayEvent",
